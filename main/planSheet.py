@@ -1,9 +1,11 @@
 import tkinter.ttk as ttk
 import json
 import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from tkinter import *
 from tkinter import filedialog
-from pyhwpx import Hwp
+from docControll import oneProgram, twoProgram, threeProgram
 
 #####################################################################################################
 
@@ -36,21 +38,14 @@ def show_frame_1(event):
 
 def show_frame_2(event):
     selection_2 = cmb_class.get()
-    if selection_2 == "3차시":
+    if selection_2 == "3차시" or selection_2 == "4차시":
         lbl_program_1_1.pack_forget()
         cmb_program_1_1.pack_forget()
         lbl_program_2_1.pack_forget()
         cmb_program_2_1.pack_forget()
         lbl_program_3_1.pack_forget()
         cmb_program_3_1.pack_forget()
-    elif selection_2 == "4차시":
-        lbl_program_1_1.pack_forget()
-        cmb_program_1_1.pack_forget()
-        lbl_program_2_1.pack_forget()
-        cmb_program_2_1.pack_forget()
-        lbl_program_3_1.pack_forget()
-        cmb_program_3_1.pack_forget()
-    elif selection_2 == "6차시":
+    elif selection_2 == "5차시" or selection_2 == "6차시":
         lbl_program_1_1.pack(side="left", padx=5, pady=5)
         cmb_program_1_1.pack(side="left", padx=5, pady=5)
         lbl_program_2_1.pack(side="left", padx=5, pady=5)
@@ -78,7 +73,6 @@ def browse_dest_path_1():
     folder_selected = filedialog.askdirectory(initialdir=initial_dir)
     if folder_selected == '': # 사용자가 취소를 누를 때
         return
-    # print(folder_selected)
     txt_dest_path_1.delete(0, END)
     txt_dest_path_1.insert(0, folder_selected)
 
@@ -119,92 +113,26 @@ def start():
     last_grade = cmb_grade_3.get()
     last_class = cmb_ban_3.get()
 
-    # 바꿔야할 텍스트
-    # (날짜년도) -> 4자리 수 년도
-    # (학교명) -> ex) 서울 용산고등학교
-    # (풀날짜) -> ex) 2024년 04월 27일
-    # (학년) -> ex) 1학년
-    # (반) -> ex) 3반
-
-    # 대체 텍스트 값 생성
     class_date = year + "년 " + month + "월 " + day + "일"
 
     if grade_num == "1개 학년":
-        if class_num in ["3차시", "4차시"]:
-            full_directory_path = directory_path + "/" + class_num + "/"
-
-            doc_list = []
-            for i in range(1, 8):
-                program_file_path = full_directory_path + str(i) + "p" + "/" + first_program_1 + ".hwp"
-                raw_file_path = to_raw(os.path.normpath(program_file_path))
-                doc_list.append(raw_file_path)
-
-            hwp = Hwp()
-
-            # 문서 병합
-            for i in doc_list:
-                hwp.insert_file(i, move_doc_end=True)
-
-            hwp.MoveDocBegin()
-            hwp.DeletePage()
-
-            # 대체 텍스트 값 생성
-            formatted_price_2 = "{:,}".format(int(price) - 150000)
-            formatted_price_3 = "{:,}".format(150000 * int(first_class))
-            formatted_price_4 = "{:,}".format((int(price) - 150000) * int(first_class))
-            formatted_price_5 = "{:,}".format(int(price) * int(first_class))
-
-            # 텍스트 대체
-            hwp.find_replace_all("(날짜년도)", year)
-            hwp.find_replace_all("(학교명)", school_name)
-            hwp.find_replace_all("(풀날짜)", class_date)
-            hwp.find_replace_all("(학년)", first_grade)
-            hwp.find_replace_all("(반)", first_class)
-
-            if class_num == "3차시":
-                # 대체 텍스트 값 생성
-                formatted_price_2 = "{:,}".format(int(price) - 150000)
-                formatted_price_3 = "{:,}".format(150000 * int(first_class))
-                formatted_price_4 = "{:,}".format((int(price) - 150000) * int(first_class))
-                formatted_price_5 = "{:,}".format(int(price) * int(first_class))
-
-                # 텍스트 대체
-                hwp.find_replace_all("Price_1", formatted_price_1)
-                hwp.find_replace_all("Price_2", formatted_price_2)
-                hwp.find_replace_all("Price_3", formatted_price_3)
-                hwp.find_replace_all("Price_4", formatted_price_4)
-                hwp.find_replace_all("Price_5", formatted_price_5)
-
-            elif class_num == "4차시":
-                # 대체 텍스트 값 생성
-                formatted_price_2 = "{:,}".format(int(price) - 200000)
-                formatted_price_3 = "{:,}".format(200000 * int(first_class))
-                formatted_price_4 = "{:,}".format((int(price) - 200000) * int(first_class))
-                formatted_price_5 = "{:,}".format(int(price) * int(first_class))
-
-                # 텍스트 대체
-                hwp.find_replace_all("Price_1", formatted_price_1)
-                hwp.find_replace_all("Price_2", formatted_price_2)
-                hwp.find_replace_all("Price_3", formatted_price_3)
-                hwp.find_replace_all("Price_4", formatted_price_4)
-                hwp.find_replace_all("Price_5", formatted_price_5)
-
-        elif class_num == "6차시":
-            pass
+        doc = oneProgram.Category(first_grade, first_class, class_num, directory_path, class_date,
+                        first_program_1, first_program_2,
+                        school_name, price)
+        doc.makeDoc()
     elif grade_num == "2개 학년":
-        if class_num == "3차시":
-            pass
-        elif class_num == "4차시":
-            pass
-        elif class_num == "6차시":
-            pass
+        doc = twoProgram.Category(class_num, directory_path, class_date,
+                         first_program_1, first_program_2, first_grade, first_class,
+                         second_program_1, second_program_2, second_grade, second_class,
+                         school_name, price)
+        doc.makeDoc()
     elif grade_num == "3개 학년":
-        if class_num == "3차시":
-            pass
-        elif class_num == "4차시":
-            pass
-        elif class_num == "6차시":
-            pass
+        doc = threeProgram.Category(class_num, directory_path, class_date,
+                         first_program_1, first_program_2, first_grade, first_class,
+                         second_program_1, second_program_2, second_grade, second_class,
+                         last_program_1, last_program_2, last_grade, last_class,
+                         school_name, price)
+        doc.makeDoc()
 
 ########################################################################################################
 
@@ -234,7 +162,7 @@ lbl_class = Label(frame_option_sub_1, text="차시", width=8)
 lbl_class.pack(side="left", padx=5, pady=5)
 
 # 차시 콤보
-opt_class = ["3차시", "4차시", "6차시"]
+opt_class = ["3차시", "4차시", "5차시", "6차시"]
 cmb_class = ttk.Combobox(frame_option_sub_1, state="readonly", values=opt_class, width=10)
 cmb_class.pack(side="left", padx=5, pady=5)
 cmb_class.bind("<<ComboboxSelected>>", show_frame_2)
