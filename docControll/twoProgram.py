@@ -60,11 +60,11 @@ class Category:
             programPage.append(self.second_program_1 + "_교구")
             programPage.append(self.second_program_1 + "_4차시")
         elif self.class_num == "5차시":
-            programPage.append(self.first_program_1 + "_교구")
-            programPage.append(self.first_program_1 + "_4차시")
+            programPage.append(self.first_program_1 + "_교구") # 6
+            programPage.append(self.first_program_1 + "_4차시") # 7
             programPage.append(self.first_program_2 + "_5차시")
-            programPage.append(self.second_program_1 + "_교구")
-            programPage.append(self.second_program_1 + "_4차시")
+            programPage.append(self.second_program_1 + "_교구") # 9
+            programPage.append(self.second_program_1 + "_4차시") # 10
             programPage.append(self.second_program_2 + "_5차시")
         elif self.class_num == "6차시":
             programPage.append(self.first_program_1 + "_교구")
@@ -83,44 +83,86 @@ class Category:
         hwp = Hwp(new=True)
 
         # 문서 병합
-        for i in range(0, len(doc_list)):
-            if (i == 0):
-                hwp.insert_file(doc_list[i])
-            elif (i == 1):
-                hwp.MoveDocEnd()
-                hwp.insert_file(doc_list[i], keep_section=False)
-                hwp.find_replace_all("(학년)", self.first_grade)
-            elif (i == 2):
-                hwp.MoveDocEnd()
-                hwp.insert_file(doc_list[i], keep_section=False)
-                hwp.find_replace_all("(학년)", self.second_grade)
-            elif (i == 3):
-                hwp.MoveDocEnd()
-                hwp.insert_file(doc_list[i], move_doc_end=True)
-            elif (i == 4):
-                hwp.MoveDocEnd()
-                hwp.insert_file(doc_list[i], keep_section=False)
-                hwp.find_replace_all("(학년)", self.first_grade)
-            elif (i == 5):
-                hwp.MoveDocEnd()
-                hwp.insert_file(doc_list[i], keep_section=False)
-                hwp.find_replace_all("(학년)", self.second_grade)
-            elif (i == 6):
-                hwp.MoveDocEnd()
-                hwp.insert_file(doc_list[i], move_doc_end=True)
-            elif (i == 7):
-                hwp.MoveDocEnd()
-                hwp.insert_file(doc_list[i], move_doc_end=True)
-                hwp.find_replace_all("(학년)", self.first_grade)
-                hwp.find_replace_all("(학급)", self.first_class + "학급")
-            elif (i == 8):
-                hwp.MoveDocEnd()
-                hwp.insert_file(doc_list[i], move_doc_end=True)
-            else:
-                hwp.MoveDocEnd()
-                hwp.insert_file(doc_list[i], move_doc_end=True)
-                hwp.find_replace_all("(학년)", self.second_grade)
-                hwp.find_replace_all("(학급)", self.second_class + "학급")
+        if (self.class_num == "3차시" or self.class_num == "4차시"):
+            for i in range(0, len(doc_list)):
+                if (i == 0):
+                    hwp.insert_file(doc_list[i])
+                elif (i == 1):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], keep_section=False)
+                    hwp.find_replace_all("(학년)", self.first_grade)
+                elif (i == 2):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], keep_section=False)
+                    hwp.find_replace_all("(학년)", self.second_grade)
+                elif (i == 3):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], move_doc_end=True)
+                elif (i == 4):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], keep_section=False)
+                    hwp.find_replace_all("(학년)", self.first_grade)
+                elif (i == 5):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], keep_section=False)
+                    hwp.find_replace_all("(학년)", self.second_grade)
+                elif (i == 6):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], move_doc_end=True)
+                elif (i == 7):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], move_doc_end=True)
+                    hwp.find_replace_all("(학년)", self.first_grade)
+                    hwp.find_replace_all("(학급)", self.first_class + "학급")
+                elif (i == 8):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], move_doc_end=True)
+                else:
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], move_doc_end=True)
+                    hwp.find_replace_all("(학년)", self.second_grade)
+                    hwp.find_replace_all("(학급)", self.second_class + "학급")
+        else:
+            for i in range(0, len(doc_list)):
+                if (i == 0):
+                    hwp.insert_file(doc_list[i])
+                elif (i == 1):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], keep_section=False)
+                    hwp.find_replace_all("(학년)", self.first_grade)
+                elif (i == 2):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], keep_section=False)
+                    hwp.find_replace_all("(학년)", self.second_grade)
+                elif (i == 3):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], move_doc_end=True)
+                elif (i == 4):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], keep_section=False)
+                    hwp.find_replace_all("(학년)", self.first_grade)
+                elif (i == 5):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], keep_section=False)
+                    hwp.find_replace_all("(학년)", self.second_grade)
+                elif (i <= 7):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], move_doc_end=True)
+                elif (i == 8):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], move_doc_end=True)
+                    hwp.find_replace_all("(학년)", self.first_grade)
+                    hwp.find_replace_all("(학급)", self.first_class + "학급")
+                    hwp.find_replace_all("(프로그램명)", self.first_program_2)
+                elif (i <= 10):
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], move_doc_end=True)
+                else:
+                    hwp.MoveDocEnd()
+                    hwp.insert_file(doc_list[i], move_doc_end=True)
+                    hwp.find_replace_all("(학년)", self.second_grade)
+                    hwp.find_replace_all("(학급)", self.second_class + "학급")
+                    hwp.find_replace_all("(프로그램명)", self.second_program_2)
 
         hwp.MoveDocBegin()
         hwp.DeletePage()
