@@ -119,6 +119,7 @@ def start():
     # 이메일 정보
     email_check = email_var.get()
     email = email_entry.get()
+    teacher = teacher_entry.get()
 
     if grade_num == "1개 학년":
         doc = oneProgram.Category(first_grade, first_class, class_num, directory_path, class_date,
@@ -143,7 +144,11 @@ def start():
     file_list.append(file_path)
 
     if email_check:
-        gmail = Gmail(filenames=file_list, grade_num=grade_num, school_name=school_name, first_grade=first_grade, first_program_1=first_program_1)
+        gmail = Gmail(filenames=file_list, grade_num=grade_num, school_name=school_name,
+                      email=email, teacher=teacher, class_date=class_date, class_num=class_num,
+                      first_program_1=first_program_1, first_grade=first_grade, first_class=first_class,
+                      second_program_1=second_program_1, second_grade=second_grade, second_class=second_class,
+                      last_program_1=last_program_1, last_grade=last_grade, last_class=last_class)
         gmail.send_gmail()
 
 ########################################################################################################
@@ -355,11 +360,17 @@ email_var.set(1)
 email_checkBox = Checkbutton(frame_email, text="이메일 보내기", variable=email_var)
 email_checkBox.pack(side="left", padx=5, pady=5)
 
-email_label = Label(frame_email, text="메일 입력칸")
+email_label = Label(frame_email, text="받을 메일")
 email_label.pack(side="left", padx=5, pady=5)
 
 email_entry = Entry(frame_email, width=40)
 email_entry.pack(side="left", padx=5, pady=5, ipady=4)
+
+teacher_label = Label(frame_email, text="부장님 성함")
+teacher_label.pack(side="left", padx=5, pady=5)
+
+teacher_entry = Entry(frame_email, width=20)
+teacher_entry.pack(side="left", padx=5, pady=5, ipady=4)
 
 # 실행 프레임
 frame_run = Frame(root)
