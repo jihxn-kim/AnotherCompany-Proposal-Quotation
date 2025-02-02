@@ -270,5 +270,7 @@ class Category:
         hwp.save_as(file_name)
         # hwp.save_pdf_as_image()
         hwp.quit()
-    
+
+        absolute_path = os.path.join(os.getcwd(), file_name)
+        return absolute_path
 

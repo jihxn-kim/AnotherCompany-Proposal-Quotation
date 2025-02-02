@@ -6,6 +6,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from tkinter import *
 from tkinter import filedialog
 from docControll import oneProgram, twoProgram, threeProgram
+from mail.gmail import Gmail
 
 #####################################################################################################
 
@@ -92,6 +93,8 @@ def start():
     month = cmb_month.get()
     day = cmb_day.get()
 
+    class_date = year + "년 " + month + "월 " + day + "일"
+
     # 학교명/반당 금액
     school_name = txt_school_name.get("1.0", END).strip()
     price = txt_cost.get("1.0", END).strip()
@@ -113,26 +116,35 @@ def start():
     last_grade = cmb_grade_3.get()
     last_class = cmb_ban_3.get()
 
-    class_date = year + "년 " + month + "월 " + day + "일"
+    # 이메일 정보
+    email_check = email_var.get()
+    email = email_entry.get()
 
     if grade_num == "1개 학년":
         doc = oneProgram.Category(first_grade, first_class, class_num, directory_path, class_date,
                         first_program_1, first_program_2,
                         school_name, price)
-        doc.makeDoc()
+        file_path = doc.makeDoc()
     elif grade_num == "2개 학년":
         doc = twoProgram.Category(class_num, directory_path, class_date,
                          first_program_1, first_program_2, first_grade, first_class,
                          second_program_1, second_program_2, second_grade, second_class,
                          school_name, price)
-        doc.makeDoc()
+        file_path = doc.makeDoc()
     elif grade_num == "3개 학년":
         doc = threeProgram.Category(class_num, directory_path, class_date,
                          first_program_1, first_program_2, first_grade, first_class,
                          second_program_1, second_program_2, second_grade, second_class,
                          last_program_1, last_program_2, last_grade, last_class,
                          school_name, price)
-        doc.makeDoc()
+        file_path = doc.makeDoc()
+
+    file_list = []
+    file_list.append(file_path)
+
+    if email_check:
+        gmail = Gmail(filenames=file_list, grade_num=grade_num, school_name=school_name, first_grade=first_grade, first_program_1=first_program_1)
+        gmail.send_gmail()
 
 ########################################################################################################
 
@@ -333,13 +345,21 @@ txt_dest_path_1.pack(side="left", fill="x", expand=True, padx=5, pady=5, ipady=4
 btn_dest_path_1 = Button(path_frame_1, text="찾아보기", width=10, command=browse_dest_path_1)
 btn_dest_path_1.pack(side="right", padx=5, pady=5)
 
-# 진행 상황 Progress Bar
-frame_progress = LabelFrame(root, text="진행상황")
-frame_progress.pack(fill="x", padx=5, pady=5, ipady=5)
+# 이메일 전송 여부
+frame_email = LabelFrame(root, text="이메일 전송")
+frame_email.pack(fill="x", padx=5, pady=5, ipady=5)
 
-p_var = DoubleVar()
-progress_bar = ttk.Progressbar(frame_progress, maximum=100, variable=p_var)
-progress_bar.pack(fill="x", padx=5, pady=5)
+email_var = IntVar()
+email_var.set(1)
+
+email_checkBox = Checkbutton(frame_email, text="이메일 보내기", variable=email_var)
+email_checkBox.pack(side="left", padx=5, pady=5)
+
+email_label = Label(frame_email, text="메일 입력칸")
+email_label.pack(side="left", padx=5, pady=5)
+
+email_entry = Entry(frame_email, width=40)
+email_entry.pack(side="left", padx=5, pady=5, ipady=4)
 
 # 실행 프레임
 frame_run = Frame(root)
