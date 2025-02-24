@@ -11,13 +11,14 @@ import time
 # school_name: 학교명
 # price: 반당 금액
 class Doc:
-    def __init__(self, first_grade, first_class, class_num, directory_path, class_date,
+    def __init__(self, first_grade, first_class, class_num, directory_path, save_path, class_date,
                  first_program_1, first_program_2,
                  school_name):
         self.first_grade = first_grade
         self.first_class = first_class
         self.class_num = class_num
         self.directory_path = directory_path
+        self.save_path = save_path
         self.class_date = class_date
         self.first_program_1 = first_program_1
         self.first_program_2 = first_program_2
@@ -77,7 +78,7 @@ class Doc:
         hwp.find_replace_all("(프로그램 종류)", program)
 
         curr_time = time.strftime("%y%m%d").strip()
-        file_name = curr_time + "_" + self.school_name + "_" + self.first_grade + "_" + self.first_program_1 + "_계획안_어나더컴퍼니.hwp"
+        file_name = self.save_path + "/" + curr_time + "_" + self.school_name + "_" + self.first_grade + "_" + self.first_program_1 + "_계획안_어나더컴퍼니.hwp"
 
         # 한글파일 저장
         hwp.save_as(file_name)

@@ -3,13 +3,14 @@ import time
 import os
 
 class Sheet:
-    def __init__(self, first_grade, first_class, class_num, directory_path, class_date,
+    def __init__(self, first_grade, first_class, class_num, directory_path, save_path, class_date,
                  first_program_1, first_program_2,
                  school_name, price):
         self.first_grade = first_grade
         self.first_class = first_class
         self.class_num = class_num
         self.directory_path = directory_path
+        self.save_path = save_path
         self.class_date = class_date
         self.first_program_1 = first_program_1
         self.first_program_2 = first_program_2
@@ -88,7 +89,7 @@ class Sheet:
         ws["G12"] = material_cost * int(self.first_class) + 50000 * int(self.class_num[:1]) * int(self.first_class)
 
         ## 파일명
-        file_name = time.strftime("%y%m%d").strip() + "_" + self.school_name + "_" + self.first_grade + "_" + self.first_program_1 + "_견적서_어나더컴퍼니.xlsx"
+        file_name = self.save_path + "/" + time.strftime("%y%m%d").strip() + "_" + self.school_name + "_" + self.first_grade + "_" + self.first_program_1 + "_견적서_어나더컴퍼니.xlsx"
         wb.save(file_name)
 
         absolute_path = os.path.join(os.getcwd(), file_name)

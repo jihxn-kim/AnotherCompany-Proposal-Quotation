@@ -11,16 +11,31 @@ from mail.gmail import Gmail
 
 #####################################################################################################
 
+def format_cost(event):
+    value = event.widget.get("1.0", "end-1c").strip().replace(",", "")
+    if value.isdigit():
+        formatted_value = f"{int(value):,}"
+        event.widget.delete("1.0", "end")
+        event.widget.insert("1.0", formatted_value)
+
 root = Tk()
 root.title("계획안 제작_어나더컴퍼니")
 
 config_file_path_1 = os.path.join(os.path.expanduser('~'), '.plan_sheet_path.json')
+config_file_path_2 = os.path.join(os.path.expanduser('~'), '.plan_sheet_path_2.json')
 
 try:
     with open(config_file_path_1, 'r') as f:
         pass
 except FileNotFoundError:
     with open(config_file_path_1, 'w') as f:
+        json.dump({'file_path': "폴더 경로를 입력해주세요"}, f)
+
+try:
+    with open(config_file_path_2, 'r') as f:
+        pass
+except FileNotFoundError:
+    with open(config_file_path_2, 'w') as f:
         json.dump({'file_path': "폴더 경로를 입력해주세요"}, f)
 
 def show_frame_1(event):
@@ -60,12 +75,25 @@ def save_config_1(file_path):
     with open(config_file_path_1, 'w') as f:
         json.dump({'file_path': file_path}, f)
 
+def save_config_2(file_path):
+    # 설정을 JSON 파일에 저장
+    with open(config_file_path_2, 'w') as f:
+        json.dump({'file_path': file_path}, f)
+
 def load_config_1():
     # 설정 파일에서 파일 경로 불러오기
     try:
         with open(config_file_path_1, 'r') as f:
             config = json.load(f)
-            test = config.get('file_path')
+            return config.get('file_path')
+    except FileNotFoundError:
+        return None
+    
+def load_config_2():
+    # 설정 파일에서 파일 경로 불러오기
+    try:
+        with open(config_file_path_2, 'r') as f:
+            config = json.load(f)
             return config.get('file_path')
     except FileNotFoundError:
         return None
@@ -80,6 +108,16 @@ def browse_dest_path_1():
 
     save_config_1(folder_selected)
 
+def browse_dest_path_2():
+    initial_dir = load_config_2()
+    folder_selected = filedialog.askdirectory(initialdir=initial_dir)
+    if folder_selected == '': # 사용자가 취소를 누를 때
+        return
+    txt_dest_path_2.delete(0, END)
+    txt_dest_path_2.insert(0, folder_selected)
+
+    save_config_2(folder_selected)
+
 def to_raw(file_path):
     return fr"{file_path}"
 
@@ -88,6 +126,7 @@ def start():
     grade_num = cmb_grade.get() # 학년 수
     class_num = cmb_class.get() # 차시
     directory_path = txt_dest_path_1.get() # 양식 파일 경로
+    save_path = txt_dest_path_2.get()
 
     # 수업 날짜 정보
     year = txt_year.get("1.0", END).strip()
@@ -98,8 +137,8 @@ def start():
 
     # 학교명/반당 금액
     school_name = txt_school_name.get("1.0", END).strip()
-    price = txt_cost.get("1.0", END).strip()
-    formatted_price_1 = "{:,}".format(int(price)) # 세자리마다 쉼표 처리
+    price = txt_cost.get("1.0", END).strip().replace(",", "")
+    print("price: " + price)
 
     # 프로그램 정보
     first_program_1 = cmb_program_1.get()
@@ -123,12 +162,12 @@ def start():
     teacher = teacher_entry.get()
 
     if grade_num == "1개 학년":
-        doc = docOneProgram.Doc(first_grade, first_class, class_num, directory_path, class_date,
+        doc = docOneProgram.Doc(first_grade, first_class, class_num, directory_path, save_path, class_date,
                         first_program_1, first_program_2,
                         school_name)
         doc_file_path = doc.makeDoc()
 
-        sheet = sheetOneProgram.Sheet(first_grade, first_class, class_num, directory_path, class_date,
+        sheet = sheetOneProgram.Sheet(first_grade, first_class, class_num, directory_path, save_path, class_date,
                         first_program_1, first_program_2,
                         school_name, price)
         
@@ -243,6 +282,7 @@ lbl_cost.pack(side="left", padx=5, pady=5)
 # 반당 금액 텍스트박스
 txt_cost = Text(sub_frame_school_info1, width=22, height=1)
 txt_cost.pack(side="left", padx=5, pady=5)
+txt_cost.bind("<KeyRelease>", format_cost)
 
 # 학교 정보 서브 프레임 2
 sub_frame_school_info2 = Frame(frame_school_info)
@@ -358,6 +398,17 @@ txt_dest_path_1.pack(side="left", fill="x", expand=True, padx=5, pady=5, ipady=4
 
 btn_dest_path_1 = Button(path_frame_1, text="찾아보기", width=10, command=browse_dest_path_1)
 btn_dest_path_1.pack(side="right", padx=5, pady=5)
+
+# 파일 저장할 경로 프레임
+path_frame_2 = LabelFrame(root, text="파일 저장할 폴더경로")
+path_frame_2.pack(fill="x", padx=5, pady=5, ipady=5)
+
+txt_dest_path_2 = Entry(path_frame_2)
+txt_dest_path_2.insert(0, load_config_2())
+txt_dest_path_2.pack(side="left", fill="x", expand=True, padx=5, pady=5, ipady=4) # 높이 변경
+
+btn_dest_path_2 = Button(path_frame_2, text="찾아보기", width=10, command=browse_dest_path_2)
+btn_dest_path_2.pack(side="right", padx=5, pady=5)
 
 # 이메일 전송 여부
 frame_email = LabelFrame(root, text="이메일 전송")
