@@ -5,6 +5,7 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from tkinter import *
 from tkinter import filedialog
+from tkinter import messagebox
 from docControll import docOneProgram, docThreeProgram, docTwoProgram
 from sheetControll import sheetOneProgram
 from mail.gmail import Gmail
@@ -23,6 +24,7 @@ root.title("계획안 제작_어나더컴퍼니")
 
 config_file_path_1 = os.path.join(os.path.expanduser('~'), '.plan_sheet_path.json')
 config_file_path_2 = os.path.join(os.path.expanduser('~'), '.plan_sheet_path_2.json')
+config_file_path_3 = os.path.join(os.path.expanduser('~'), '.plan_sheet_path_3.json')
 
 try:
     with open(config_file_path_1, 'r') as f:
@@ -37,6 +39,13 @@ try:
 except FileNotFoundError:
     with open(config_file_path_2, 'w') as f:
         json.dump({'file_path': "폴더 경로를 입력해주세요"}, f)
+
+try:
+    with open(config_file_path_3, 'r') as f:
+        pass
+except FileNotFoundError:
+    with open(config_file_path_3, 'w') as f:
+        pass
 
 def show_frame_1(event):
     selection_1 = cmb_grade.get()
@@ -69,6 +78,75 @@ def show_frame_2(event):
         cmb_program_2_1.pack(side="left", padx=5, pady=5)
         lbl_program_3_1.pack(side="left", padx=5, pady=5)
         cmb_program_3_1.pack(side="left", padx=5, pady=5)
+
+def add_manager(name, email, password, cmb_manager):
+    if name == "" or email == "" or password == "":
+        messagebox.showwarning("입력 오류", "모든 필수값을 입력해주세요!")
+        return
+
+    user_info = {
+        "name": name,
+        "id": email,
+        "app_pass": password
+    }
+
+    with open(config_file_path_3, 'r') as f:
+        try:
+            existing_data = json.load(f)
+            if not isinstance(existing_data, list):
+                existing_data = [existing_data]
+        except json.JSONDecodeError:
+            existing_data = []
+    
+    existing_data.append(user_info)
+
+    with open(config_file_path_3, 'w') as f:
+        json.dump(existing_data, f, indent=4)
+
+    update_manager_list(cmb_manager)
+    
+    messagebox.showinfo("추가 완료", "새로운 매니저가 등록되었습니다!")
+
+    # 확인용으로 파일 내용 출력
+    with open(config_file_path_3, 'r') as f:
+        loaded_data = json.load(f)
+        print(loaded_data)
+
+def delete_manager(name, cmb_manager):
+    try:
+        with open(config_file_path_3, "r") as f:
+            existing_data = json.load(f)
+
+        updated_data = [manager for manager in existing_data if manager["name"] != name]
+
+        with open(config_file_path_3, "w") as f:
+            json.dump(updated_data, f, indent=4)
+        
+        messagebox.showinfo("삭제 성공", "매니저를 삭제했습니다")
+
+        update_manager_list(cmb_manager)
+
+        with open(config_file_path_3, 'r') as f:
+            loaded_data = json.load(f)
+            print(loaded_data)
+
+    except Exception:
+        messagebox.showerror("삭제 실패", "매니저 삭제에 실패했습니다!")
+
+def get_manager_list():
+    try:
+        with open(config_file_path_3, "r") as f:
+            existing_data = json.load(f)
+
+        manager_names = [manager["name"] for manager in existing_data]
+
+        return manager_names
+    except:
+        messagebox.showerror("오류", "매니저 명단을 불러오는데 실패했습니다!")
+
+def update_manager_list(dropdown):
+    manager_names = get_manager_list()
+    dropdown['values'] = manager_names
 
 def save_config_1(file_path):
     # 설정을 JSON 파일에 저장
@@ -160,6 +238,7 @@ def start():
     email_check = email_var.get()
     email = email_entry.get()
     teacher = teacher_entry.get()
+    manager = cmb_manager.get()
 
     if grade_num == "1개 학년":
         doc = docOneProgram.Doc(first_grade, first_class, class_num, directory_path, save_path, class_date,
@@ -423,7 +502,7 @@ email_checkBox.pack(side="left", padx=5, pady=5)
 email_label = Label(frame_email, text="받을 메일")
 email_label.pack(side="left", padx=5, pady=5)
 
-email_entry = Entry(frame_email, width=40)
+email_entry = Entry(frame_email, width=30)
 email_entry.pack(side="left", padx=5, pady=5, ipady=4)
 
 teacher_label = Label(frame_email, text="부장님 성함")
@@ -431,6 +510,42 @@ teacher_label.pack(side="left", padx=5, pady=5)
 
 teacher_entry = Entry(frame_email, width=20)
 teacher_entry.pack(side="left", padx=5, pady=5, ipady=4)
+
+manager_label = Label(frame_email, text="매니저")
+manager_label.pack(side="left", padx=5, pady=5)
+
+manager_names = get_manager_list()
+
+cmb_manager = ttk.Combobox(frame_email, values=manager_names, width=10)
+cmb_manager.pack(side="left", padx=5, pady=5, ipady=4)
+
+# 매니저 관리
+frame_manager = LabelFrame(root, text="매니저 관리")
+frame_manager.pack(fill="x", padx=5, pady=5, ipady=5)
+
+manager_name_label = Label(frame_manager, text="이름")
+manager_name_label.pack(side="left", padx=5, pady=5)
+
+manager_name_entry = Entry(frame_manager, width=20)
+manager_name_entry.pack(side="left", padx=5, pady=5, ipady=4)
+
+manager_email_label = Label(frame_manager, text="메일 주소")
+manager_email_label.pack(side="left", padx=5, pady=5)
+
+manager_email_entry = Entry(frame_manager, width=20)
+manager_email_entry.pack(side="left", padx=5, pady=5, ipady=4)
+
+manager_password_label = Label(frame_manager, text="앱 비밀번호")
+manager_password_label.pack(side="left", padx=5, pady=5)
+
+manager_password_entry = Entry(frame_manager, width=20)
+manager_password_entry.pack(side="left", padx=5, pady=5, ipady=4)
+
+btn_delete = Button(frame_manager, padx=5, pady=5, text="삭제", width=8, command=lambda: delete_manager(manager_name_entry.get(), cmb_manager))
+btn_delete.pack(side="right", padx=5, pady=5)
+
+btn_add = Button(frame_manager, padx=5, pady=5, text="추가", width=8, command=lambda: add_manager(manager_name_entry.get(), manager_email_entry.get(), manager_password_entry.get(), cmb_manager))
+btn_add.pack(side="right", padx=5, pady=5)
 
 # 실행 프레임
 frame_run = Frame(root)
