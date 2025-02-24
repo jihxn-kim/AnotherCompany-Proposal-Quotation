@@ -5,7 +5,8 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from tkinter import *
 from tkinter import filedialog
-from docControll import oneProgram, twoProgram, threeProgram
+from docControll import docOneProgram, docThreeProgram, docTwoProgram
+from sheetControll import sheetOneProgram
 from mail.gmail import Gmail
 
 #####################################################################################################
@@ -122,26 +123,34 @@ def start():
     teacher = teacher_entry.get()
 
     if grade_num == "1개 학년":
-        doc = oneProgram.Category(first_grade, first_class, class_num, directory_path, class_date,
+        doc = docOneProgram.Doc(first_grade, first_class, class_num, directory_path, class_date,
+                        first_program_1, first_program_2,
+                        school_name)
+        doc_file_path = doc.makeDoc()
+
+        sheet = sheetOneProgram.Sheet(first_grade, first_class, class_num, directory_path, class_date,
                         first_program_1, first_program_2,
                         school_name, price)
-        file_path = doc.makeDoc()
+        
+        sheet_file_path = sheet.makeSheet()
+        
     elif grade_num == "2개 학년":
-        doc = twoProgram.Category(class_num, directory_path, class_date,
+        doc = docTwoProgram.Category(class_num, directory_path, class_date,
                          first_program_1, first_program_2, first_grade, first_class,
                          second_program_1, second_program_2, second_grade, second_class,
-                         school_name, price)
-        file_path = doc.makeDoc()
+                         school_name)
+        doc_file_path = doc.makeDoc()
     elif grade_num == "3개 학년":
-        doc = threeProgram.Category(class_num, directory_path, class_date,
+        doc = docThreeProgram.Category(class_num, directory_path, class_date,
                          first_program_1, first_program_2, first_grade, first_class,
                          second_program_1, second_program_2, second_grade, second_class,
                          last_program_1, last_program_2, last_grade, last_class,
-                         school_name, price)
-        file_path = doc.makeDoc()
+                         school_name)
+        doc_file_path = doc.makeDoc()
 
     file_list = []
-    file_list.append(file_path)
+    file_list.append(doc_file_path)
+    file_list.append(sheet_file_path)
 
     if email_check:
         gmail = Gmail(filenames=file_list, grade_num=grade_num, school_name=school_name,

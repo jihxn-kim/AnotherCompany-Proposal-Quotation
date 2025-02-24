@@ -10,10 +10,10 @@ import time
 # first_program_2: 프로그램 정보 (오후)
 # school_name: 학교명
 # price: 반당 금액
-class Category:
+class Doc:
     def __init__(self, first_grade, first_class, class_num, directory_path, class_date,
                  first_program_1, first_program_2,
-                 school_name, price):
+                 school_name):
         self.first_grade = first_grade
         self.first_class = first_class
         self.class_num = class_num
@@ -22,7 +22,6 @@ class Category:
         self.first_program_1 = first_program_1
         self.first_program_2 = first_program_2
         self.school_name = school_name
-        self.price = price
 
     @staticmethod
     def to_raw(file_path):

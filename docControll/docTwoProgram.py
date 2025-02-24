@@ -12,18 +12,13 @@ import time
 # second_program_2: 두 번째 프로그램 정보 (오후)
 # second_grade: 두 번째 학년
 # second_class: 두 번째 반
-# last_program_1: 세 번째 프로그램 정보 (오전)
-# last_program_2: 세 번째 프로그램 정보 (오후)
-# last_grade: 세 번째 학년
-# last_class: 세 번째 반
 # school_name: 학교명
 # price: 반당 금액
 class Category:
     def __init__(self, class_num, directory_path, class_date,
                  first_program_1, first_program_2, first_grade, first_class,
                  second_program_1, second_program_2, second_grade, second_class,
-                 last_program_1, last_program_2, last_grade, last_class,
-                 school_name, price):
+                 school_name):
         self.class_num = class_num
         self.directory_path = directory_path
         self.class_date = class_date
@@ -38,13 +33,7 @@ class Category:
         self.second_grade = second_grade
         self.second_class = second_class
 
-        self.last_program_1 = last_program_1
-        self.last_program_2 = last_program_2
-        self.last_grade = last_grade
-        self.last_class = last_class
-
         self.school_name = school_name
-        self.price = price
 
     @staticmethod
     def to_raw(file_path):
@@ -54,9 +43,9 @@ class Category:
         full_directory_path = self.directory_path + "/twoProgram/"
 
         programPage = [
-            "title3", 
-            self.first_program_1 + "_소개", self.second_program_1 + "_소개", self.last_program_1 + "_소개", "성과",
-            self.first_program_1 + "_성과", self.second_program_1 + "_성과", self.last_program_1 + "_성과",
+            "title2", 
+            self.first_program_1 + "_소개", self.second_program_1 + "_소개", "성과",
+            self.first_program_1 + "_성과", self.second_program_1 + "_성과",
             ]
 
         if self.class_num == "3차시":
@@ -64,25 +53,18 @@ class Category:
             programPage.append(self.first_program_1 + "_3차시")
             programPage.append(self.second_program_1 + "_교구")
             programPage.append(self.second_program_1 + "_3차시")
-            programPage.append(self.last_program_1 + "_교구")
-            programPage.append(self.last_program_1 + "_3차시")
         elif self.class_num == "4차시":
             programPage.append(self.first_program_1 + "_교구")
             programPage.append(self.first_program_1 + "_4차시")
             programPage.append(self.second_program_1 + "_교구")
             programPage.append(self.second_program_1 + "_4차시")
-            programPage.append(self.last_program_1 + "_교구")
-            programPage.append(self.last_program_1 + "_4차시")
         elif self.class_num == "5차시":
-            programPage.append(self.first_program_1 + "_교구") # 8
-            programPage.append(self.first_program_1 + "_4차시") # 9
-            programPage.append(self.first_program_2 + "_5차시") # 10
-            programPage.append(self.second_program_1 + "_교구") 
-            programPage.append(self.second_program_1 + "_4차시")
+            programPage.append(self.first_program_1 + "_교구") # 6
+            programPage.append(self.first_program_1 + "_4차시") # 7
+            programPage.append(self.first_program_2 + "_5차시")
+            programPage.append(self.second_program_1 + "_교구") # 9
+            programPage.append(self.second_program_1 + "_4차시") # 10
             programPage.append(self.second_program_2 + "_5차시")
-            programPage.append(self.last_program_1 + "_교구")
-            programPage.append(self.last_program_1 + "_4차시")
-            programPage.append(self.last_program_2 + "_5차시")
         elif self.class_num == "6차시":
             programPage.append(self.first_program_1 + "_교구")
             programPage.append(self.first_program_1 + "_4차시")
@@ -90,9 +72,6 @@ class Category:
             programPage.append(self.second_program_1 + "_교구")
             programPage.append(self.second_program_1 + "_4차시")
             programPage.append(self.second_program_2 + "_6차시")
-            programPage.append(self.last_program_1 + "_교구")
-            programPage.append(self.last_program_1 + "_4차시")
-            programPage.append(self.last_program_2 + "_6차시")
 
         doc_list = []
         for i in programPage:
@@ -117,49 +96,31 @@ class Category:
                     hwp.find_replace_all("(학년)", self.second_grade)
                 elif (i == 3):
                     hwp.MoveDocEnd()
-                    hwp.insert_file(doc_list[i], keep_section=False)
-                    hwp.find_replace_all("(학년)", self.last_grade)
-                    hwp.MoveDocEnd()
-                    hwp.DeletePage()
-                elif (i == 4):
-                    hwp.MoveDocEnd()
                     hwp.insert_file(doc_list[i], move_doc_end=True)
-                elif (i == 5):
+                elif (i == 4):
                     hwp.MoveDocEnd()
                     hwp.insert_file(doc_list[i], keep_section=False)
                     hwp.find_replace_all("(학년)", self.first_grade)
-                elif (i == 6):
+                elif (i == 5):
                     hwp.MoveDocEnd()
                     hwp.insert_file(doc_list[i], keep_section=False)
                     hwp.find_replace_all("(학년)", self.second_grade)
-                elif (i == 7):
-                    hwp.MoveDocEnd()
-                    hwp.insert_file(doc_list[i], keep_section=False)
-                    hwp.find_replace_all("(학년)", self.last_grade)
-                elif (i == 8):
+                elif (i == 6):
                     hwp.MoveDocEnd()
                     hwp.insert_file(doc_list[i], move_doc_end=True)
-                elif (i == 9):
+                elif (i == 7):
                     hwp.MoveDocEnd()
                     hwp.insert_file(doc_list[i], move_doc_end=True)
                     hwp.find_replace_all("(학년)", self.first_grade)
                     hwp.find_replace_all("(학급)", self.first_class + "학급")
-                elif (i == 10):
+                elif (i == 8):
                     hwp.MoveDocEnd()
                     hwp.insert_file(doc_list[i], move_doc_end=True)
-                elif (i == 11):
+                else:
                     hwp.MoveDocEnd()
                     hwp.insert_file(doc_list[i], move_doc_end=True)
                     hwp.find_replace_all("(학년)", self.second_grade)
                     hwp.find_replace_all("(학급)", self.second_class + "학급")
-                elif (i == 12):
-                    hwp.MoveDocEnd()
-                    hwp.insert_file(doc_list[i], move_doc_end=True)
-                elif (i == 13):
-                    hwp.MoveDocEnd()
-                    hwp.insert_file(doc_list[i], move_doc_end=True)
-                    hwp.find_replace_all("(학년)", self.last_grade)
-                    hwp.find_replace_all("(학급)", self.last_class + "학급")
         else:
             for i in range(0, len(doc_list)):
                 if (i == 0):
@@ -174,52 +135,33 @@ class Category:
                     hwp.find_replace_all("(학년)", self.second_grade)
                 elif (i == 3):
                     hwp.MoveDocEnd()
-                    hwp.insert_file(doc_list[i], keep_section=False)
-                    hwp.find_replace_all("(학년)", self.last_grade)
-                    hwp.MoveDocEnd()
-                    hwp.DeletePage()
-                elif (i == 4):
-                    hwp.MoveDocEnd()
                     hwp.insert_file(doc_list[i], move_doc_end=True)
-                elif (i == 5):
+                elif (i == 4):
                     hwp.MoveDocEnd()
                     hwp.insert_file(doc_list[i], keep_section=False)
                     hwp.find_replace_all("(학년)", self.first_grade)
-                elif (i == 6):
+                elif (i == 5):
                     hwp.MoveDocEnd()
                     hwp.insert_file(doc_list[i], keep_section=False)
                     hwp.find_replace_all("(학년)", self.second_grade)
-                elif (i == 7):
-                    hwp.MoveDocEnd()
-                    hwp.insert_file(doc_list[i], keep_section=False)
-                    hwp.find_replace_all("(학년)", self.last_grade)
-                elif (i <= 9):
+                elif (i <= 7):
                     hwp.MoveDocEnd()
                     hwp.insert_file(doc_list[i], move_doc_end=True)
-                elif (i == 10):
+                elif (i == 8):
                     hwp.MoveDocEnd()
                     hwp.insert_file(doc_list[i], move_doc_end=True)
                     hwp.find_replace_all("(학년)", self.first_grade)
                     hwp.find_replace_all("(학급)", self.first_class + "학급")
                     hwp.find_replace_all("(프로그램명)", self.first_program_2)
-                elif (i <= 12):
+                elif (i <= 10):
                     hwp.MoveDocEnd()
                     hwp.insert_file(doc_list[i], move_doc_end=True)
-                elif (i == 13):
+                else:
                     hwp.MoveDocEnd()
                     hwp.insert_file(doc_list[i], move_doc_end=True)
                     hwp.find_replace_all("(학년)", self.second_grade)
                     hwp.find_replace_all("(학급)", self.second_class + "학급")
                     hwp.find_replace_all("(프로그램명)", self.second_program_2)
-                elif (i <= 15):
-                    hwp.MoveDocEnd()
-                    hwp.insert_file(doc_list[i], move_doc_end=True)
-                elif (i == 16):
-                    hwp.MoveDocEnd()
-                    hwp.insert_file(doc_list[i], move_doc_end=True)
-                    hwp.find_replace_all("(학년)", self.last_grade)
-                    hwp.find_replace_all("(학급)", self.last_class + "학급")
-                    hwp.find_replace_all("(프로그램명)", self.last_program_2)
 
         hwp.MoveDocBegin()
         hwp.DeletePage()
@@ -231,12 +173,9 @@ class Category:
         hwp.find_replace_all("(학급1)", self.first_class + "학급")
         hwp.find_replace_all("(학년2)", self.second_grade)
         hwp.find_replace_all("(학급2)", self.second_class + "학급")
-        hwp.find_replace_all("(학년3)", self.last_grade)
-        hwp.find_replace_all("(학급3)", self.last_class + "학급")
         hwp.find_replace_all("(차시)", self.class_num)
         hwp.find_replace_all("(프로그램명1)", self.first_program_1)
         hwp.find_replace_all("(프로그램명2)", self.second_program_1)
-        hwp.find_replace_all("(프로그램명3)", self.last_program_1)
 
         if (self.first_program_1 == "수상한스튜디오"):
             program_1 = "비전욕망설계 캠프"
@@ -252,16 +191,8 @@ class Category:
         elif (self.second_program_1 == "비밀상담소"):
             program_2 = "고교학점제 캠프"
 
-        if (self.last_program_1 == "수상한스튜디오"):
-            program_3 = "비전욕망설계 캠프"
-        elif (self.last_program_1 == "어나더랜드"):
-            program_3 = "창업가정신 캠프"
-        elif (self.last_program_1 == "비밀상담소"):
-            program_3 = "고교학점제 캠프"
-
         hwp.find_replace_all("(프로그램 종류1)", program_1)
         hwp.find_replace_all("(프로그램 종류2)", program_2)
-        hwp.find_replace_all("(프로그램 종류3)", program_3)
 
         curr_time = time.strftime("%y%m%d").strip()
         file_name = curr_time + "_" + self.school_name + "_시뮬레이션진로캠프_계획안_어나더컴퍼니.hwp"
@@ -273,4 +204,5 @@ class Category:
 
         absolute_path = os.path.join(os.getcwd(), file_name)
         return absolute_path
+    
 
