@@ -37,12 +37,8 @@ class Doc:
             programPage.append(self.first_program_1 + "_3차시")
         elif self.class_num == "4차시":
             programPage.append(self.first_program_1 + "_4차시")
-        elif self.class_num == "5차시":
-            programPage.append(self.first_program_1 + "_4차시")
-            programPage.append(self.first_program_2 + "_5차시")
         elif self.class_num == "6차시":
-            programPage.append(self.first_program_1 + "_4차시")
-            programPage.append(self.first_program_2 + "_6차시")
+            programPage.append(self.first_program_1 + "_6차시_" + self.first_program_2)
 
         doc_list = []
         for i in programPage:

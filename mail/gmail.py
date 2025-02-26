@@ -16,11 +16,12 @@ class Gmail:
                  email=None, teacher=None, class_date=None, class_num=None,
                  first_program_1=None, first_grade=None, first_class=None,
                  second_program_1=None, second_grade=None, second_class=None,
-                 last_program_1=None, last_grade=None, last_class=None):
-        self.my_id = GMAIL['id']
-        self.my_app_pass = GMAIL['app_pass']
+                 last_program_1=None, last_grade=None, last_class=None,
+                 id=None, app_pass=None, manager=None, bcc=None):
+        self.my_id = id
+        self.my_app_pass = app_pass
         self.send_to = [email]
-        self.bcc = ['hun@anothercompany.co.kr']  # 숨김참조
+        self.bcc = bcc # 숨김참조
         self.attach_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'attachments')
         self.filenames = filenames if filenames else []
 
@@ -68,7 +69,7 @@ class Gmail:
             <body>
                 <p style="font-size: 14px; font-family: Gulim, Arial, sans-serif;">
                     안녕하세요, {teacher} 부장님~<br/>
-                    어나더컴퍼니입니다.
+                    어나더컴퍼니 {manager} 매니저입니다.
                     <br/><br/>
 
                     이렇게 인사드리게되어 반갑습니다 :)<br/>

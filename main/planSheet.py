@@ -148,6 +148,36 @@ def update_manager_list(dropdown):
     manager_names = get_manager_list()
     dropdown['values'] = manager_names
 
+def get_manager_info(name):
+    try:
+        with open(config_file_path_3, "r") as f:
+            existing_data = json.load(f)
+
+        for manager in existing_data:
+            if manager["name"] == name:
+                return manager["id"], manager["app_pass"]
+
+        return None, None  # 해당 이름을 찾지 못한 경우
+
+    except FileNotFoundError:
+        print("파일을 찾을 수 없습니다.")
+        return None, 
+    except json.JSONDecodeError:
+        print("JSON 파일을 읽는 데 문제가 발생했습니다.")
+        return None, None
+
+def get_emails_except(name):
+    try:
+        with open(config_file_path_3, "r") as f:
+            data = json.load(f)
+
+        emails = [obj["id"] for obj in data if obj["name"] != name]
+        return emails
+
+    except Exception as e:
+        print(f"오류 발생: {e}")
+        return []
+
 def save_config_1(file_path):
     # 설정을 JSON 파일에 저장
     with open(config_file_path_1, 'w') as f:
@@ -271,11 +301,15 @@ def start():
     file_list.append(sheet_file_path)
 
     if email_check:
+        id, app_pass = get_manager_info(manager)
+        bcc = get_emails_except(manager)
+
         gmail = Gmail(filenames=file_list, grade_num=grade_num, school_name=school_name,
                       email=email, teacher=teacher, class_date=class_date, class_num=class_num,
                       first_program_1=first_program_1, first_grade=first_grade, first_class=first_class,
                       second_program_1=second_program_1, second_grade=second_grade, second_class=second_class,
-                      last_program_1=last_program_1, last_grade=last_grade, last_class=last_class)
+                      last_program_1=last_program_1, last_grade=last_grade, last_class=last_class,
+                      id=id, app_pass=app_pass, manager=manager, bcc=bcc)
         gmail.send_gmail()
 
 ########################################################################################################
@@ -390,7 +424,7 @@ lbl_program_1 = Label(sub_frame_school_info2, text="1~4차시 프로그램", wid
 lbl_program_1.pack(side="left", padx=5, pady=5)
 
 # 프로그램 콤보박스
-opt_program = ["수상한스튜디오", "어나더랜드", "취업조작단", "비밀상담소", "코드5"]
+opt_program = ["수상한스튜디오", "어나더랜드", "취업조작단", "어나더비밀상담소", "코드5", "AI오피스"]
 cmb_program_1 = ttk.Combobox(sub_frame_school_info2, state="readonly", values=opt_program, width=20, height=5)
 cmb_program_1.pack(side="left", padx=5, pady=5)
 
