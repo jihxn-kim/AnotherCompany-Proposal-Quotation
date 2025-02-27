@@ -37,6 +37,8 @@ class Sheet:
             program_name = "시뮬레이션 고교학점제캠프 [비밀상담소]"
         elif self.first_program_1 == "코드5":
             program_name = "직무-직업매칭 빅게임 [CODE 5]"
+        elif self.first_program_1 == "AI오피스":
+            pass
 
         ws["H4"] = program_name
 
@@ -82,6 +84,8 @@ class Sheet:
             material = "고교학점제 툴킷(고교학점제 카드), 교재 (A4, 8P, 컬러)"
         elif self.first_program_1 == "코드5":
             material = "CODE 5 툴킷(직무카드 330장, 플레이매트, 점수카드 등), 교재 (A3, 컬러, 2매)"
+        elif self.first_program_1 == "AI오피스":
+            pass
 
         ws["H11"] = material
 
