@@ -10,6 +10,7 @@ import time
 # first_program_2: 프로그램 정보 (오후)
 # school_name: 학교명
 # price: 반당 금액
+
 class Doc:
     def __init__(self, first_grade, first_class, class_num, directory_path, save_path, class_date,
                  first_program_1, first_program_2,

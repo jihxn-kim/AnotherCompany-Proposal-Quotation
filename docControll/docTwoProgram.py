@@ -14,6 +14,7 @@ import time
 # second_class: 두 번째 반
 # school_name: 학교명
 # price: 반당 금액
+
 class Category:
     def __init__(self, class_num, directory_path, class_date,
                  first_program_1, first_program_2, first_grade, first_class,

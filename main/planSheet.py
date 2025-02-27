@@ -7,7 +7,7 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
 from docControll import docOneProgram, docThreeProgram, docTwoProgram
-from sheetControll import sheetOneProgram
+from sheetControll import sheetOneProgram, sheetTwoProgram, sheetThreeProgram
 from mail.gmail import Gmail
 
 #####################################################################################################
@@ -288,6 +288,14 @@ def start():
                          second_program_1, second_program_2, second_grade, second_class,
                          school_name)
         doc_file_path = doc.makeDoc()
+
+        sheet = sheetTwoProgram.Sheet(class_num, directory_path, class_date, save_path,
+                        first_program_1, first_program_2, first_grade, first_class,
+                        second_program_1, second_program_2, second_grade, second_class,
+                        school_name, price)
+        
+        sheet_file_path = sheet.makeSheet()
+
     elif grade_num == "3개 학년":
         doc = docThreeProgram.Category(class_num, directory_path, class_date,
                          first_program_1, first_program_2, first_grade, first_class,
@@ -295,6 +303,14 @@ def start():
                          last_program_1, last_program_2, last_grade, last_class,
                          school_name)
         doc_file_path = doc.makeDoc()
+
+        sheet = sheetThreeProgram.Sheet(class_num, directory_path, class_date, save_path,
+                        first_program_1, first_program_2, first_grade, first_class,
+                        second_program_1, second_program_2, second_grade, second_class,
+                        last_program_1, last_program_2, last_grade, last_class,
+                        school_name, price)
+        
+        sheet_file_path = sheet.makeSheet()
 
     file_list = []
     file_list.append(doc_file_path)
