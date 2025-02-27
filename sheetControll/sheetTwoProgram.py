@@ -119,6 +119,3 @@ class Sheet:
 
         absolute_path = os.path.join(os.getcwd(), file_name)
         return absolute_path
-
-
-        
