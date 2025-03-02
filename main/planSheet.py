@@ -325,21 +325,22 @@ def start():
         
         sheet_file_path = sheet.makeSheet()
 
-    # file_list = []
-    # file_list.append(doc_file_path)
-    # file_list.append(sheet_file_path)
+    file_list = []
+    file_list.append(doc_file_path)
+    file_list.append(sheet_file_path)
+    file_list.append(os.path.join(directory_path, "사업자등록증&통장사본/24년_사업자등록증&통장사본_어나더컴퍼니.pdf"))
 
-    # if email_check:
-    #     id, app_pass = get_manager_info(manager)
-    #     bcc = get_emails_except(manager)
+    if email_check:
+        id, app_pass = get_manager_info(manager)
+        bcc = get_emails_except(manager)
 
-    #     gmail = Gmail(filenames=file_list, grade_num=grade_num, school_name=school_name,
-    #                   email=email, teacher=teacher, class_date=class_date, class_num=class_num,
-    #                   first_program_1=first_program_1, first_grade=first_grade, first_class=first_class,
-    #                   second_program_1=second_program_1, second_grade=second_grade, second_class=second_class,
-    #                   last_program_1=last_program_1, last_grade=last_grade, last_class=last_class,
-    #                   id=id, app_pass=app_pass, manager=manager, bcc=bcc)
-    #     gmail.send_gmail()
+        gmail = Gmail(filenames=file_list, grade_num=grade_num, school_name=school_name,
+                      email=email, teacher=teacher, class_date=class_date,
+                      first_program_1=first_program_1, first_grade=first_grade, first_class=first_class, class_num_1=class_num_1,
+                      second_program_1=second_program_1, second_grade=second_grade, second_class=second_class, class_num_2=class_num_2,
+                      last_program_1=last_program_1, last_grade=last_grade, last_class=last_class, class_num_3=class_num_3,
+                      id=id, app_pass=app_pass, manager=manager, bcc=bcc)
+        gmail.send_gmail()
 
 ########################################################################################################
 

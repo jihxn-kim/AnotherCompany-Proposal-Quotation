@@ -9,14 +9,12 @@ from email import encoders
 from email.header import Header
 from email.utils import formataddr
 
-from mail.config import GMAIL
-
 class Gmail:
     def __init__(self, filenames=None, grade_num=None, school_name=None,
-                 email=None, teacher=None, class_date=None, class_num=None,
-                 first_program_1=None, first_grade=None, first_class=None,
-                 second_program_1=None, second_grade=None, second_class=None,
-                 last_program_1=None, last_grade=None, last_class=None,
+                 email=None, teacher=None, class_date=None,
+                 first_program_1=None, first_grade=None, first_class=None, class_num_1=None,
+                 second_program_1=None, second_grade=None, second_class=None, class_num_2=None,
+                 last_program_1=None, last_grade=None, last_class=None, class_num_3=None,
                  id=None, app_pass=None, manager=None, bcc=None):
         self.my_id = id
         self.my_app_pass = app_pass
@@ -33,36 +31,54 @@ class Gmail:
 
         # 프로그램 종류 치환
         if (first_program_1 == "수상한스튜디오"):
-            program_1 = "비전욕망설계 캠프"
+            program_1 = "비전욕망설계 프로그램"
         elif (first_program_1 == "어나더랜드"):
-            program_1 = "창업가정신 캠프"
-        elif (first_program_1 == "비밀상담소"):
-            program_1 = "고교학점제 캠프"
+            program_1 = "창업가정신 프로그램"
+        elif (first_program_1 == "어나더비밀상담소"):
+            program_1 = "고교학점제 프로그램"
+        elif (first_program_1 == "취업조작단"):
+            program_1 = "진로역량 발산 프로그램"
+        elif (first_program_1 == "코드5"):
+            program_1 = "직무-직업 매칭 프로그램"
+        elif (first_program_1 == "AI오피스"):
+            program_1 = "인공지능 프로그램"
 
         if (second_program_1 == "수상한스튜디오"):
-            program_2 = "비전욕망설계 캠프"
+            program_2 = "비전욕망설계 프로그램"
         elif (second_program_1 == "어나더랜드"):
-            program_2 = "창업가정신 캠프"
-        elif (second_program_1 == "비밀상담소"):
-            program_2 = "고교학점제 캠프"
+            program_2 = "창업가정신 프로그램"
+        elif (second_program_1 == "어나더비밀상담소"):
+            program_2 = "고교학점제 프로그램"
+        elif (second_program_1 == "취업조작단"):
+            program_2 = "진로역량 발산 프로그램"
+        elif (second_program_1 == "코드5"):
+            program_2 = "직무-직업 매칭 프로그램"
+        elif (second_program_1 == "AI오피스"):
+            program_2 = "인공지능 프로그램"
 
         if (last_program_1 == "수상한스튜디오"):
-            program_3 = "비전욕망설계 캠프"
+            program_3 = "비전욕망설계 프로그램"
         elif (last_program_1 == "어나더랜드"):
-            program_3 = "창업가정신 캠프"
-        elif (last_program_1 == "비밀상담소"):
-            program_3 = "고교학점제 캠프"
+            program_3 = "창업가정신 프로그램"
+        elif (last_program_1 == "어나더비밀상담소"):
+            program_3 = "고교학점제 프로그램"
+        elif (last_program_1 == "취업조작단"):
+            program_3 = "진로역량 발산 프로그램"
+        elif (last_program_1 == "코드5"):
+            program_3 = "직무-직업 매칭 프로그램"
+        elif (last_program_1 == "AI오피스"):
+            program_3 = "인공지능 프로그램"
 
         # 내용 - 대상 & 내용
         if (grade_num == "1개 학년"):
             target = f"{first_grade} ({first_class}반)"
-            content = f"&nbsp;&nbsp;[{first_program_1} / {program_1} / {class_num}]"
+            content = f"&nbsp;&nbsp;[{first_program_1} / {program_1} / {class_num_1}]"
         elif (grade_num == "2개 학년"):
             target = f"{first_grade} ({first_class}반), {second_grade} ({second_class}반)"
-            content = f"&nbsp;&nbsp;{first_grade} : [{first_program_1} / {program_1} / {class_num}]<br/>&nbsp;&nbsp;{second_grade} : [{second_program_1} / {program_2} / {class_num}]"
+            content = f"&nbsp;&nbsp;{first_grade} : [{first_program_1} / {program_1} / {class_num_1}]<br/>&nbsp;&nbsp;{second_grade} : [{second_program_1} / {program_2} / {class_num_2}]"
         elif (grade_num == "3개 학년"):
             target = f"{first_grade} ({first_class}반), {second_grade} ({second_class}반), {last_grade} ({last_class}반)"
-            content = f"&nbsp;&nbsp;{first_grade} : [{first_program_1} / {program_1} / {class_num}]<br/>&nbsp;&nbsp;{second_grade} : [{second_program_1} / {program_2} / {class_num}]<br/>&nbsp;&nbsp;{last_grade} : [{last_program_1} / {program_3} / {class_num}]"
+            content = f"&nbsp;&nbsp;{first_grade} : [{first_program_1} / {program_1} / {class_num_1}]<br/>&nbsp;&nbsp;{second_grade} : [{second_program_1} / {program_2} / {class_num_2}]<br/>&nbsp;&nbsp;{last_grade} : [{last_program_1} / {program_3} / {class_num_3}]"
 
         self.content = textwrap.dedent(f"""\
             <html>
