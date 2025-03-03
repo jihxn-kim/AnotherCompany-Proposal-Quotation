@@ -239,6 +239,26 @@ def browse_dest_path_2():
 def to_raw(file_path):
     return fr"{file_path}"
 
+def checkProgramValid(program_1, program_2, class_num):
+    if class_num == "3차시" and program_1 == "AI오피스":
+        messagebox.showerror("실패", f"{program_1} {class_num}는 선택할 수 없습니다.")
+        return False
+    elif class_num == "6차시":
+        if program_1 == "코드5":
+            messagebox.showerror("실패", "코드5 는 3차시, 4차시만 가능합니다.")
+            return False
+        elif program_1 != "취업조작단" and program_2 == "취업조작단1~6차시":
+            messagebox.showerror("실패", f"취업조작단1~6차시는 취업조작단으로만 구성해야 합니다.")
+            return False
+
+    return True
+
+def checkBlankValid(*args):
+    if any(arg == "" for arg in args):
+        messagebox.showerror("실패", "모든 필수항목을 입력해주세요.")
+        return False
+    return True
+
 def start():
     # 학년 정보
     grade_num = cmb_grade.get() # 학년 수
@@ -254,6 +274,9 @@ def start():
 
     # 학교명
     school_name = txt_school_name.get("1.0", END).strip()
+
+    if checkBlankValid(grade_num, directory_path, save_path, year, month, day, school_name) == False:
+        return
 
     # 프로그램 정보
     first_program_1 = cmb_program_1.get() # 1 ~ 4 차시 프로그램
@@ -283,7 +306,21 @@ def start():
     teacher = teacher_entry.get()
     manager = cmb_manager.get()
 
+    if email_check:
+        if checkBlankValid(email, teacher, manager) == False:
+            return
+
     if grade_num == "1개 학년":
+        if class_num_1 == "6차시":
+            if checkBlankValid(first_grade, first_class, class_num_1, first_program_1, first_program_2, price_1) == False:
+                return
+        else:
+            if checkBlankValid(first_grade, first_class, class_num_1, first_program_1, price_1) == False:
+                return
+
+        if checkProgramValid(first_program_1, first_program_2, class_num_1) == False:
+            return
+        
         doc = docOneProgram.Doc(first_grade, first_class, class_num_1, directory_path, save_path, class_date,
                         first_program_1, first_program_2,
                         school_name)
@@ -296,6 +333,25 @@ def start():
         sheet_file_path = sheet.makeSheet()
         
     elif grade_num == "2개 학년":
+        if class_num_1 == "6차시":
+            if checkBlankValid(first_grade, first_class, class_num_1, first_program_1, first_program_2, price_1) == False:
+                return
+        else:
+            if checkBlankValid(first_grade, first_class, class_num_1, first_program_1, price_1) == False:
+                return
+
+        if class_num_2 == "6차시":
+            if checkBlankValid(second_grade, second_class, class_num_2, second_program_1, second_program_2, price_2) == False:
+                return
+        else:
+            if checkBlankValid(second_grade, second_class, class_num_2, second_program_1, price_2) == False:
+                return
+
+        if checkProgramValid(first_program_1, first_program_2, class_num_1) == False:
+            return
+        if checkProgramValid(second_program_1, second_program_2, class_num_2) == False:
+            return
+
         doc = docTwoProgram.Category(directory_path, save_path, class_date,
                          first_program_1, first_program_2, first_grade, first_class, class_num_1,
                          second_program_1, second_program_2, second_grade, second_class, class_num_2,
@@ -310,6 +366,34 @@ def start():
         sheet_file_path = sheet.makeSheet()
 
     elif grade_num == "3개 학년":
+        if class_num_1 == "6차시":
+            if checkBlankValid(first_grade, first_class, class_num_1, first_program_1, first_program_2, price_1) == False:
+                return
+        else:
+            if checkBlankValid(first_grade, first_class, class_num_1, first_program_1, price_1) == False:
+                return
+
+        if class_num_2 == "6차시":
+            if checkBlankValid(second_grade, second_class, class_num_2, second_program_1, second_program_2, price_2) == False:
+                return
+        else:
+            if checkBlankValid(second_grade, second_class, class_num_2, second_program_1, price_2) == False:
+                return
+        
+        if class_num_3 == "6차시":
+            if checkBlankValid(last_grade, last_class, class_num_3, last_program_1, last_program_2, price_3) == False:
+                return
+        else:
+            if checkBlankValid(last_grade, last_class, class_num_3, last_program_1, price_3) == False:
+                return
+
+        if checkProgramValid(first_program_1, first_program_2, class_num_1) == False:
+            return
+        if checkProgramValid(second_program_1, second_program_2, class_num_2) == False:
+            return
+        if checkProgramValid(last_program_1, last_program_2, class_num_3) == False:
+            return
+        
         doc = docThreeProgram.Category(directory_path, save_path, class_date,
                          first_program_1, first_program_2, first_grade, first_class, class_num_1,
                          second_program_1, second_program_2, second_grade, second_class, class_num_2,
@@ -341,6 +425,8 @@ def start():
                       last_program_1=last_program_1, last_grade=last_grade, last_class=last_class, class_num_3=class_num_3,
                       id=id, app_pass=app_pass, manager=manager, bcc=bcc)
         gmail.send_gmail()
+
+    messagebox.showinfo("성공", "작업이 완료되었습니다!")
 
 ########################################################################################################
 
