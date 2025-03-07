@@ -21,7 +21,7 @@ class Sheet:
         sampleXlsx = self.directory_path + "/견적서/oneProgram.xlsx"
         
         wb = load_workbook(sampleXlsx)
-        ws = wb['견적서']
+        ws = wb.active
 
         ## 학교명
         ws["B8"] = self.school_name 

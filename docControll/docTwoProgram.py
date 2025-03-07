@@ -48,7 +48,7 @@ class Category:
         full_directory_path = self.directory_path + "/twoProgram/"
 
         programPage = [
-            "title2", 
+            "intro", "title2", 
             self.first_program_1 + "_소개", self.second_program_1 + "_소개", "성과",
             self.first_program_1 + "_성과", self.second_program_1 + "_성과",
             ]
@@ -75,24 +75,42 @@ class Category:
 
         hwp = Hwp(new=True)
 
+        curr_time = time.strftime("%y%m%d").strip()
+        curr_year = time.strftime("%Y") + "년"
+        curr_month = time.strftime("%m") + "월"
+        curr_day = time.strftime("%d") + "일"
+
         # 문서 병합
         for i in range(0, len(doc_list)):
-            if (i <= 2):
+            if (i == 0):
+                hwp.insert_file(doc_list[i], keep_section=True)
+                hwp.MoveDocEnd()
+                hwp.find_replace_all("(학년)", f"{self.first_grade}, {self.second_grade}")
+                hwp.find_replace_all("(날짜)", f"{curr_year} {curr_month} {curr_day}")
+            elif (i == 1):
+                hwp.insert_file(doc_list[i], keep_section=True)
+                hwp.MoveDocEnd()
+            elif (i <= 3):
                 hwp.insert_file(doc_list[i], keep_section=False)
                 hwp.MoveDocEnd()
-            elif (i == 3):
+            elif (i == 4):
                 hwp.insert_file(doc_list[i], move_doc_end=True)
-            elif (i <= 5):
+            elif (i <= 6):
                 hwp.insert_file(doc_list[i], keep_section=False)
                 hwp.MoveDocEnd()
-            elif (i == 6):
+            elif (i == 7):
                 hwp.insert_file(doc_list[i], move_doc_end=True)
                 hwp.find_replace_all("(학년)", self.first_grade)
-            elif (i == 8):
+                hwp.find_replace_all("(n)", 2)
+            elif (i == 9):
                 hwp.insert_file(doc_list[i], move_doc_end=True)
                 hwp.find_replace_all("(학년)", self.second_grade)
+                hwp.find_replace_all("(n)", 3)
             else:
                 hwp.insert_file(doc_list[i], move_doc_end=True)
+        
+        hwp.MoveDocBegin()
+        hwp.DeletePage()
 
         # 텍스트 대체
         hwp.find_replace_all("(학교명)", self.school_name)
@@ -132,10 +150,6 @@ class Category:
 
         hwp.find_replace_all("(프로그램 종류1)", program_1)
         hwp.find_replace_all("(프로그램 종류2)", program_2)
-
-        curr_time = time.strftime("%y%m%d").strip()
-        curr_year = time.strftime("%Y") + "년"
-        curr_month = time.strftime("%m") + "월"
 
         save_dir = os.path.join(self.save_path, curr_year, curr_month, self.school_name)
         os.makedirs(save_dir, exist_ok=True)

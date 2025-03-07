@@ -2,7 +2,16 @@ import tkinter.ttk as ttk
 import json
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+if getattr(sys, 'frozen', False):  # PyInstaller로 실행된 경우
+    BASE_DIR = sys._MEIPASS
+else:  # 일반적인 Python 실행
+    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+sys.path.append(BASE_DIR)
+
+sys.path.append(os.path.join(BASE_DIR, "..", "docControll"))
+sys.path.append(os.path.join(BASE_DIR, "..", "mail"))
+sys.path.append(os.path.join(BASE_DIR, "..", "sheetControll"))
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
@@ -305,9 +314,10 @@ def start():
     email = email_entry.get()
     teacher = teacher_entry.get()
     manager = cmb_manager.get()
+    email_set = cmb_email_set.get()
 
     if email_check:
-        if checkBlankValid(email, teacher, manager) == False:
+        if checkBlankValid(email, teacher, manager, email_set) == False:
             return
 
     if grade_num == "1개 학년":
@@ -418,7 +428,7 @@ def start():
         id, app_pass = get_manager_info(manager)
         bcc = get_emails_except(manager)
 
-        gmail = Gmail(filenames=file_list, grade_num=grade_num, school_name=school_name,
+        gmail = Gmail(filenames=file_list, grade_num=grade_num, school_name=school_name, email_set=email_set, year=year,
                       email=email, teacher=teacher, class_date=class_date,
                       first_program_1=first_program_1, first_grade=first_grade, first_class=first_class, class_num_1=class_num_1,
                       second_program_1=second_program_1, second_grade=second_grade, second_class=second_class, class_num_2=class_num_2,
@@ -711,6 +721,14 @@ manager_names = get_manager_list()
 
 cmb_manager = ttk.Combobox(frame_email, values=manager_names, width=10)
 cmb_manager.pack(side="left", padx=5, pady=5, ipady=4)
+
+email_set_label = Label(frame_email, text="메일 형식")
+email_set_label.pack(side="left", padx=5, pady=5)
+
+email_set = ["재구매", "전학년", "신규"]
+
+cmb_email_set = ttk.Combobox(frame_email, state="readonly", values=email_set, width=5)
+cmb_email_set.pack(side="left", padx=5, pady=5, ipady=4)
 
 # 매니저 관리
 frame_manager = LabelFrame(root, text="매니저 관리")

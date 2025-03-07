@@ -33,7 +33,7 @@ class Doc:
     def makeDoc(self):
         full_directory_path = self.directory_path + "/oneProgram/"
 
-        programPage = ["title", self.first_program_1 + "_소개", self.first_program_1 + "_교구"]
+        programPage = ["intro", "title", self.first_program_1 + "_소개", self.first_program_1 + "_교구"]
 
         if self.class_num == "3차시":
             programPage.append(self.first_program_1 + "_3차시")
@@ -50,13 +50,28 @@ class Doc:
 
         hwp = Hwp(new=True)
 
+        curr_time = time.strftime("%y%m%d").strip()
+        curr_year = time.strftime("%Y") + "년"
+        curr_month = time.strftime("%m") + "월"
+        curr_day = time.strftime("%d") + "일"
+
         # 문서 병합
         for i in range(0, len(doc_list)):
-            if (i >= 2):
+            if (i == 0):
+                hwp.insert_file(doc_list[i], keep_section=True)
+                hwp.MoveDocEnd()
+                hwp.find_replace_all("(날짜)", f"{curr_year} {curr_month} {curr_day}")
+            elif (i == 1):
+                hwp.insert_file(doc_list[i], keep_section=True)
+                hwp.MoveDocEnd()
+            elif (i >= 3):
                 hwp.insert_file(doc_list[i], move_doc_end=True)
             else:
                 hwp.insert_file(doc_list[i], keep_section=False)
                 hwp.MoveDocEnd()
+
+        hwp.MoveDocBegin()
+        hwp.DeletePage()
 
         # 텍스트 대체
         hwp.find_replace_all("(학교명)", self.school_name)
