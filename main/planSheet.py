@@ -249,10 +249,7 @@ def to_raw(file_path):
     return fr"{file_path}"
 
 def checkProgramValid(program_1, program_2, class_num):
-    if class_num == "3차시" and program_1 == "AI오피스":
-        messagebox.showerror("실패", f"{program_1} {class_num}는 선택할 수 없습니다.")
-        return False
-    elif class_num == "6차시":
+    if class_num == "6차시":
         if program_1 == "코드5":
             messagebox.showerror("실패", "코드5 는 3차시, 4차시만 가능합니다.")
             return False
