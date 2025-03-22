@@ -419,7 +419,7 @@ def start():
     file_list = []
     file_list.append(doc_file_path)
     file_list.append(sheet_file_path)
-    file_list.append(os.path.join(directory_path, "사업자등록증&통장사본/24년_사업자등록증&통장사본_어나더컴퍼니.pdf"))
+    file_list.append(os.path.join(directory_path, "사업자등록증&통장사본/25년_사업자등록증&통장사본_어나더컴퍼니.pdf"))
 
     if email_check:
         id, app_pass = get_manager_info(manager)
