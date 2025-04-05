@@ -35,10 +35,8 @@ class Doc:
 
         programPage = ["intro", "title", self.first_program_1 + "_소개", self.first_program_1 + "_교구"]
 
-        if self.class_num == "3차시":
-            programPage.append(self.first_program_1 + "_3차시")
-        elif self.class_num == "4차시":
-            programPage.append(self.first_program_1 + "_4차시")
+        if self.class_num != "6차시":
+            programPage.append(self.first_program_1 + "_" + self.class_num)
         elif self.class_num == "6차시":
             programPage.append(self.first_program_1 + "_6차시_" + self.first_program_2)
 

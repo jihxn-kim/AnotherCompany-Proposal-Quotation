@@ -419,7 +419,7 @@ def start():
     file_list = []
     file_list.append(doc_file_path)
     file_list.append(sheet_file_path)
-    file_list.append(os.path.join(directory_path, "사업자등록증&통장사본/25년_사업자등록증&통장사본_어나더컴퍼니.pdf"))
+    file_list.append(os.path.join(directory_path, "사업자등록증&통장사본/사업자등록증&통장사본_어나더컴퍼니.pdf"))
 
     if email_check:
         id, app_pass = get_manager_info(manager)
@@ -530,7 +530,7 @@ lbl_class_1 = Label(sub_frame_school_info2, text="차시", width=3)
 lbl_class_1.pack(side="left", padx=5, pady=5)
 
 # 차시 콤보박스
-opt_class = ["3차시", "4차시", "6차시"]
+opt_class = ["3차시", "4차시", "5차시", "6차시", "7차시"]
 
 cmb_class_1 = ttk.Combobox(sub_frame_school_info2, state="readonly", values=opt_class, width=5)
 cmb_class_1.pack(side="left", padx=5, pady=5)
